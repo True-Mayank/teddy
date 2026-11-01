@@ -1,0 +1,606 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#09090b">
+<title>LUXE Music</title>
+<link rel="stylesheet" href="style.css">
+<script src="android-folder-picker.js"></script>
+</head>
+
+<body>
+
+<div class="app">
+
+<header class="topbar">
+  <div>
+    <div class="brand">LUXE<span>•</span></div>
+    <div class="subtitle">OFFLINE MUSIC</div>
+  </div>
+
+  <button id="themeBtn" class="icon-btn" title="Customize appearance">✦</button>
+</header>
+
+
+<main>
+
+<!-- WELCOME -->
+
+<section id="welcome" class="welcome screen">
+
+  <div class="hero-ring">
+    <div class="hero-note">♪</div>
+  </div>
+
+  <p class="eyebrow">PRIVATE • OFFLINE • AD-FREE</p>
+
+  <h1>
+    Your music.<br>
+    <em>Your device.</em>
+  </h1>
+
+  <p class="muted">
+    Choose your music folder and LUXE will build your personal
+    offline library. Your music stays on your device.
+  </p>
+
+  <button id="chooseFolderBtn" class="primary-btn">
+    SELECT MUSIC FOLDER
+  </button>
+
+  <input
+    id="folderInput"
+    type="file"
+    webkitdirectory
+    directory
+    multiple
+    accept="audio/*"
+    hidden
+  >
+
+  <p id="folderStatus" class="tiny">
+    Your browser controls access to local files.
+  </p>
+
+</section>
+
+
+<!-- LIBRARY -->
+
+<section id="library" class="screen hidden">
+
+  <div class="greeting">
+
+    <div>
+      <p class="eyebrow">YOUR LIBRARY</p>
+      <h1 id="hello">LUXE Music</h1>
+    </div>
+
+    <button id="rescanBtn" class="small-btn">
+      ↻ Rescan
+    </button>
+
+  </div>
+
+
+  <!-- FOUR MAIN LIBRARY SECTIONS -->
+  <section id="homeContent" class="home-content">
+    <div class="library-actions main-category-actions">
+      <button class="library-action" data-library="songs" type="button">
+        <span class="action-icon">♫</span><strong>Tracks</strong><small id="homeSongCount">0 tracks</small>
+      </button>
+      <button class="library-action" data-library="playlists" type="button">
+        <span class="action-icon">☷</span><strong>Playlist</strong><small id="homePlaylistCount">0 playlists</small>
+      </button>
+      <button class="library-action" data-library="favorites" type="button">
+        <span class="action-icon">♡</span><strong>Favourite</strong><small id="homeFavoriteCount">0 songs</small>
+      </button>
+      <button class="library-action" data-library="recent" type="button">
+        <span class="action-icon">◷</span><strong>Recent</strong><small>Recently played</small>
+      </button>
+    </div>
+  </section>
+
+  <!-- SEARCH -->
+
+  <div class="searchbox">
+
+    <span>⌕</span>
+
+    <input
+      id="search"
+      placeholder="Search your music..."
+      autocomplete="off"
+    >
+
+  </div>
+
+  <div id="breadcrumb" class="breadcrumb hidden"></div>
+
+
+  <div class="section-title">
+
+    <h2 id="sectionHeading">
+      Your Music
+    </h2>
+
+    <div class="view-tools">
+
+      <span id="resultCount"></span>
+
+      <button id="sortBtn" class="view-btn menu-trigger" title="View, sort and playing order" aria-label="View, sort and playing order">☰</button>
+
+    </div>
+
+  </div>
+
+
+  <div id="sortMenu" class="sort-menu hidden">
+    <div class="sort-menu-title">VIEW</div>
+    <button data-setting="view" data-value="list">List view</button>
+    <button data-setting="view" data-value="waterfall">Waterfall view</button>
+    <button data-setting="view" data-value="grid">Grid view</button>
+    <div class="sort-menu-title">SORT ORDER</div>
+    <button data-setting="sort" data-value="title-az">Song title A–Z</button>
+    <button data-setting="sort" data-value="title-za">Song title Z–A</button>
+    <button data-setting="sort" data-value="added-new">Date added, newest</button>
+    <button data-setting="sort" data-value="added-old">Date added, oldest</button>
+    <button data-setting="sort" data-value="recent">Recently played</button>
+    <button data-setting="sort" data-value="most-played">Most played</button>
+    <div class="sort-menu-title">PLAYING ORDER</div>
+    <button data-setting="playing" data-value="consecutive">Consecutive</button>
+    <button data-setting="playing" data-value="random">Random</button>
+  </div>
+
+  <div id="songList" class="song-list"></div>
+
+  <div id="collectionGrid" class="collection-grid hidden"></div>
+
+  <div id="playlistGrid" class="playlist-grid hidden"></div>
+
+  <div id="empty" class="empty hidden">
+    Nothing matches your search.
+  </div>
+
+</section>
+
+</main>
+
+
+<!-- MINI PLAYER -->
+
+<div id="miniPlayer" class="mini-player hidden">
+
+  <div class="mini-swipe-handle"></div>
+
+  <div class="mini-art-wrap" id="miniSeekRing" role="slider" aria-label="Song progress" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0" tabindex="0">
+    <svg class="mini-progress-ring" viewBox="0 0 64 64" aria-hidden="true">
+      <circle class="mini-progress-track" cx="32" cy="32" r="29"></circle>
+      <circle id="miniProgressCircle" class="mini-progress-value" cx="32" cy="32" r="29"></circle>
+    </svg>
+    <div id="miniArt" class="art small-art">♪</div>
+  </div>
+
+  <div class="mini-info">
+
+    <strong id="miniTitle">
+      Nothing playing
+    </strong>
+
+    <span id="miniArtist">
+      Choose a song
+    </span>
+
+  </div>
+
+  <div class="mini-controls" aria-label="Playback controls">
+    <button id="miniPrevious" class="mini-skip" type="button" aria-label="Previous song" title="Previous song">‹|</button>
+    <button id="miniPlay" class="play-circle" type="button" aria-label="Play or pause">▶</button>
+    <button id="miniNext" class="mini-skip" type="button" aria-label="Next song" title="Next song">|›</button>
+  </div>
+
+</div>
+
+
+<!-- FULL PLAYER -->
+
+<div id="playerModal" class="player-modal hidden">
+
+  <button id="closePlayer" class="close-player">
+    ⌄
+  </button>
+
+  <div class="player-content">
+
+    <div id="bigArt" class="art big-art">
+      ♪
+    </div>
+
+    <p class="eyebrow">
+      NOW PLAYING
+    </p>
+
+    <h2 id="bigTitle">
+      Nothing playing
+    </h2>
+
+    <p id="bigArtist" class="muted">
+      Choose a song
+    </p>
+
+    <p id="bigMeta" class="player-meta">
+      Local Music
+    </p>
+
+    <input
+      id="progress"
+      class="progress"
+      type="range"
+      min="0"
+      max="100"
+      value="0"
+    >
+
+    <div class="time-row">
+      <span id="currentTime">0:00</span>
+      <span id="duration">0:00</span>
+    </div>
+
+    <div class="controls">
+
+      <button id="shuffleBtn" class="control">
+        ⤨
+      </button>
+
+      <button id="prevBtn" class="control">
+        ◀
+      </button>
+
+      <button id="bigPlay" class="big-play">
+        ▶
+      </button>
+
+      <button id="nextBtn" class="control">
+        ▶
+      </button>
+
+      <button id="repeatBtn" class="control">
+        ↻
+      </button>
+
+    </div>
+
+    <div class="volume-row">
+      🔊
+      <input
+        id="volume"
+        type="range"
+        min="0"
+        max="1"
+        step=".01"
+        value=".85"
+      >
+    </div>
+
+  </div>
+
+</div>
+
+
+<!-- THEME PANEL -->
+
+<div id="themePanel" class="overlay hidden">
+
+  <div class="settings-panel">
+
+    <div class="settings-header">
+
+      <div>
+        <p class="eyebrow">APPEARANCE</p>
+        <h2>Customize LUXE</h2>
+      </div>
+
+      <button id="closeTheme" class="panel-close">
+        ×
+      </button>
+
+    </div>
+
+
+    <div class="setting-group">
+
+
+    <div class="setting-group ui-style-group">
+      <label>UI Style</label>
+      <p class="setting-description">Change the complete look of LUXE. Your music and playlists stay the same.</p>
+      <div class="ui-style-options">
+        <button type="button" class="ui-style-option" data-ui-style="default">
+          <span class="ui-style-swatch swatch-default"><i></i><i></i><i></i></span>
+          <strong>Default</strong><small>Original LUXE</small>
+        </button>
+        <button type="button" class="ui-style-option" data-ui-style="neumorphism">
+          <span class="ui-style-swatch swatch-neumorphism"><i></i><i></i><i></i></span>
+          <strong>Neumorphism</strong><small>Soft surfaces</small>
+        </button>
+        <button type="button" class="ui-style-option" data-ui-style="glassmorphism">
+          <span class="ui-style-swatch swatch-glass"><i></i><i></i><i></i></span>
+          <strong>Glassmorphism</strong><small>Frosted glass</small>
+        </button>
+        <button type="button" class="ui-style-option" data-ui-style="liquid-glass">
+          <span class="ui-style-swatch swatch-liquid"><i></i><i></i><i></i></span>
+          <strong>Liquid Glass</strong><small>Glossy and fluid</small>
+        </button>
+        <button type="button" class="ui-style-option" data-ui-style="spatial">
+          <span class="ui-style-swatch swatch-spatial"><i></i><i></i><i></i></span>
+          <strong>Spatial UI</strong><small>Layered depth</small>
+        </button>
+      </div>
+    </div>
+
+      <label>Accent Theme</label>
+
+      <div class="theme-options">
+
+        <button data-theme-choice="deluxe">
+          <span class="theme-dot deluxe-dot"></span>
+          Deluxe
+        </button>
+
+        <button data-theme-choice="truck">
+          <span class="theme-dot truck-dot"></span>
+          Warm
+        </button>
+
+        <button data-theme-choice="sport">
+          <span class="theme-dot sport-dot"></span>
+          Sport
+        </button>
+
+      </div>
+
+    </div>
+
+
+    <div class="setting-group">
+
+      <label>Font</label>
+
+      <select id="fontSelect">
+
+        <option value="Inter">
+          Inter
+        </option>
+
+        <option value="Segoe UI">
+          Segoe UI
+        </option>
+
+        <option value="Georgia">
+          Georgia
+        </option>
+
+        <option value="Trebuchet MS">
+          Trebuchet
+        </option>
+
+        <option value="Verdana">
+          Verdana
+        </option>
+
+        <option value="Courier New">
+          Courier
+        </option>
+
+        <option value="Comic Sans MS">
+          Casual
+        </option>
+
+      </select>
+
+      <small>
+        The browser can only use fonts available on the device.
+      </small>
+
+    </div>
+
+
+    <div class="setting-group">
+
+      <label>Background</label>
+
+      <div class="wallpaper-grid">
+
+        <button
+          class="wallpaper preset-wall-1"
+          data-wallpaper="wall1"
+        >
+          Default
+        </button>
+
+        <button
+          class="wallpaper preset-wall-2"
+          data-wallpaper="wall2"
+        >
+          Gold
+        </button>
+
+        <button
+          class="wallpaper preset-wall-3"
+          data-wallpaper="wall3"
+        >
+          Midnight
+        </button>
+
+        <button
+          class="wallpaper preset-wall-4"
+          data-wallpaper="wall4"
+        >
+          Aurora
+        </button>
+
+      </div>
+
+      <label class="upload-wallpaper">
+        + Use image from device
+
+        <input
+          id="wallpaperInput"
+          type="file"
+          accept="image/*"
+          hidden
+        >
+
+      </label>
+
+      <button id="removeWallpaper" class="danger-btn">
+        Remove background image
+      </button>
+
+    </div>
+
+  </div>
+
+</div>
+
+
+<!-- CREATE PLAYLIST PANEL -->
+
+<div id="playlistCreatePanel" class="overlay hidden">
+
+  <div class="dialog">
+
+    <div class="dialog-header">
+
+      <div>
+        <p class="eyebrow">NEW PLAYLIST</p>
+        <h2>Create Playlist</h2>
+      </div>
+
+      <button id="closePlaylistCreate" class="panel-close">
+        ×
+      </button>
+
+    </div>
+
+    <input
+      id="playlistNameInput"
+      class="dialog-input"
+      placeholder="Playlist name"
+      maxlength="50"
+    >
+
+    <button id="createPlaylistConfirm" class="primary-btn">
+      CREATE PLAYLIST
+    </button>
+
+  </div>
+
+</div>
+
+
+<!-- ADD SONGS PANEL -->
+
+<div id="addSongsPanel" class="overlay hidden">
+
+  <div class="dialog add-songs-dialog">
+
+    <div class="dialog-header">
+
+      <div>
+        <p class="eyebrow">PLAYLIST</p>
+        <h2 id="addSongsTitle">Add Songs</h2>
+      </div>
+
+      <button id="closeAddSongs" class="panel-close">
+        ×
+      </button>
+
+    </div>
+
+    <div class="add-song-search">
+
+      <span>⌕</span>
+
+      <input
+        id="addSongSearch"
+        placeholder="Search songs..."
+      >
+
+    </div>
+
+    <div id="addSongList" class="add-song-list"></div>
+
+    <button id="doneAddSongs" class="primary-btn">
+      DONE
+    </button>
+
+  </div>
+
+</div>
+
+
+<!-- PLAYLIST DETAILS -->
+
+<div id="playlistPanel" class="overlay hidden">
+
+  <div class="dialog playlist-dialog">
+
+    <div class="dialog-header">
+
+      <div>
+        <p class="eyebrow">PLAYLIST</p>
+        <h2 id="playlistPanelTitle">Playlist</h2>
+      </div>
+
+      <button id="closePlaylistPanel" class="panel-close">
+        ×
+      </button>
+
+    </div>
+
+    <div class="playlist-actions">
+
+      <button id="playlistPlayBtn" class="primary-btn">
+        ▶ PLAY
+      </button>
+
+      <button id="playlistAddBtn" class="secondary-btn">
+        + ADD SONGS
+      </button>
+
+    </div>
+
+    <div class="playlist-library-tools">
+      <div class="searchbox playlist-searchbox"><span>⌕</span><input id="playlistSongSearch" placeholder="Search this playlist..." autocomplete="off"></div>
+      <button id="playlistSortBtn" class="view-btn menu-trigger" title="Playlist view, sort and playing order" aria-label="Playlist view, sort and playing order">☰</button>
+      <div id="playlistSortMenu" class="sort-menu playlist-sort-menu hidden">
+        <div class="sort-menu-title">VIEW</div>
+        <button data-playlist-setting="view" data-value="list">List view</button>
+        <button data-playlist-setting="view" data-value="waterfall">Waterfall view</button>
+        <button data-playlist-setting="view" data-value="grid">Grid view</button>
+        <div class="sort-menu-title">SORT ORDER</div>
+        <button data-playlist-setting="sort" data-value="title-az">Song title A–Z</button>
+        <button data-playlist-setting="sort" data-value="title-za">Song title Z–A</button>
+        <button data-playlist-setting="sort" data-value="added-new">Date added, newest</button>
+        <button data-playlist-setting="sort" data-value="added-old">Date added, oldest</button>
+        <button data-playlist-setting="sort" data-value="recent">Recently played</button>
+        <button data-playlist-setting="sort" data-value="most-played">Most played</button>
+        <div class="sort-menu-title">PLAYING ORDER</div>
+        <button data-playlist-setting="playing" data-value="consecutive">Consecutive</button>
+        <button data-playlist-setting="playing" data-value="random">Random</button>
+      </div>
+    </div>
+    <div id="playlistSongs" class="playlist-songs"></div>
+
+  </div>
+
+</div>
+
+
+<audio id="audio" preload="metadata"></audio>
+
+<script src="app.js"></script>
+
+</body>
+</html>

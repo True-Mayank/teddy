@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="108dp"
+    android:height="108dp"
+    android:viewportWidth="108"
+    android:viewportHeight="108">
+    <!-- thin gold ring -->
+    <path
+        android:fillColor="#00000000"
+        android:strokeColor="#D7B56D"
+        android:strokeWidth="2.6"
+        android:pathData="M54,27.5 a26.5,26.5 0 1,0 0.01,0 z" />
+    <!-- note head -->
+    <path
+        android:fillColor="#F2D79C"
+        android:pathData="M40.5,67 a6.5,6.5 0 1,0 13,0 a6.5,6.5 0 1,0 -13,0 z" />
+    <!-- note stem -->
+    <path
+        android:fillColor="#F2D79C"
+        android:pathData="M51.5,41 h3 v26 h-3 z" />
+    <!-- note flag -->
+    <path
+        android:fillColor="#D7B56D"
+        android:pathData="M54.5,41 c5.5,1 10.5,4 11.5,10.5 c-3.2,-3.4 -6.6,-4.8 -11.5,-4.8 z" />
+</vector>
